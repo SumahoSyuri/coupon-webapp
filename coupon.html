@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>クーポン画像</title>
+  <style>
+    body {
+      text-align: center;
+      padding: 40px;
+      font-family: sans-serif;
+      background-color: #fffaf0;
+    }
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+    button {
+      margin-top: 30px;
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <h2>🎉 クーポンが発行されました 🎉</h2>
+  <canvas id="couponCanvas" width="800" height="500"></canvas>
+  <br>
+  <button onclick="downloadCoupon()">画像を保存</button>
+
+  <script>
+    const canvas = document.getElementById("couponCanvas");
+    const ctx = canvas.getContext("2d");
+
+    function getQueryParam(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    }
+
+    function drawCoupon(discount, issueDate, expireDate) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 背景（仮）
+      const gradient = ctx.createLinearGradient(0, 0, 800, 500);
+      gradient.addColorStop(0, "#ffefba");
+      gradient.addColorStop(1, "#ffffff");
+      ctx.fillStyle = gradient;
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 管理番号（例：C20250708-???）→ 発行日を使って仮表示
+      const serial = `C${issueDate.replace(/-/g, "")}-???`;
+
+      ctx.fillStyle = "#333";
+      ctx.font = "20px sans-serif";
+      ctx.textAlign = "left";
+      ctx.fillText(serial, 30, 40);
+
+      // 割引額（中央）
+      ctx.textAlign = "center";
+      ctx.font = "bold 40px sans-serif";
+      ctx.fillText(`🎁 ${discount}クーポン 🎁`, canvas.width / 2, canvas.height / 2);
+
+      // 有効期限（下）
+      ctx.font = "24px sans-serif";
+      ctx.fillText(`有効期限 : ${expireDate.replace(/-/g, "年").replace(/年(\d+)$/, "月$1日")}`, canvas.width / 2, canvas.height / 2 + 50);
+    }
+
+    function downloadCoupon() {
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement("a");
+      link.download = "coupon.png";
+      link.href = image;
+      link.click();
+    }
+
+    window.onload = function () {
+      const discount = getQueryParam("discount") || "500円";
+      const issueDate = getQueryParam("issueDate") || "2025-07-08";
+      const expireDate = getQueryParam("expireDate") || "2025-10-06";
+      drawCoupon(discount, issueDate, expireDate);
+    };
+  </script>
+</body>
+</html>

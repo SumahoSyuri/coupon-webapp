@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <title>Webクーポン発行機</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      text-align: center;
+      background-color: #f9f9f9;
+      padding: 20px;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      max-width: 100%;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+    }
+
+    canvas.show {
+      opacity: 1;
+    }
+
+    button {
+      margin-top: 20px;
+      padding: 12px 24px;
+      font-size: 18px;
+      border: none;
+      border-radius: 8px;
+      background-color: #007bff;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.2s ease;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <h2>🎁 クーポン発行 🎁</h2>
+
+  <canvas id="couponCanvas" width="800" height="500"></canvas>
+  <br>
+  <button onclick="issueCoupon()">クーポンを発行する</button>
+  <br><br>
+  <button onclick="downloadCoupon()">画像を保存</button>
+
+  <script>
+    const canvas = document.getElementById('couponCanvas');
+    const ctx = canvas.getContext('2d');
+
+    function generateSerialNumber() {
+      const now = new Date();
+      const yyyymmdd = now.toISOString().slice(0, 10).replace(/-/g, '');
+      const random = Math.random().toString(36).substring(2, 6).toUpperCase(); // 例: A3F9
+      return `C${yyyymmdd}-${random}`;
+    }
+
+    function drawCouponCanvas(serial, expireDate) {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+      // 背景
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+      // 見出し
+      ctx.fillStyle = "#000000";
+      ctx.font = "bold 36px sans-serif";
+      ctx.fillText("🎁 500円割引クーポン 🎁", 200, 100);
+
+      // 管理番号（左上）
+      ctx.font = "20px sans-serif";
+      ctx.fillText(`管理番号 : ${serial}`, 20, 40);
+
+      // 有効期限（中央下）
+      const dateParts = expireDate.split("-");
+      const expiryText = `有効期限 : ${dateParts[0]}年 ${parseInt(dateParts[1])}月 ${parseInt(dateParts[2])}日`;
+      ctx.font = "24px sans-serif";
+      ctx.fillText(expiryText, 220, 400);
+    }
+
+    function issueCoupon() {
+      const serial = generateSerialNumber();
+
+      const today = new Date();
+      const issueDate = today.toISOString().split("T")[0];
+
+      const expiry = new Date(today);
+      expiry.setDate(today.getDate() + 90);
+      const expireDate = expiry.toISOString().split("T")[0];
+
+      fetch("https://script.google.com/macros/s/AKfycbzli-eFPVfmEA6rN9BbPl1rTd0vwZFfJr9Q0r9CWQHJwaxpycwh8xaFMun_BgTM83BJIQ/exec", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+          serial: serial,
+          discount: "500円割引",
+          issueDate: issueDate,
+          expireDate: expireDate
+        })
+      })
+      .then(res => res.json())
+      .then(data => {
+        if (data.result === "success") {
+          drawCouponCanvas(serial, expireDate);
+          canvas.classList.add("show");
+        } else {
+          alert("保存に失敗しました。");
+        }
+      })
+      .catch(err => {
+        console.error("通信エラー:", err);
+        alert("通信エラーが発生しました。");
+      });
+    }
+
+    function downloadCoupon() {
+      const image = canvas.toDataURL("image/png");
+      const link = document.createElement('a');
+      link.download = 'coupon.png';
+      link.href = image;
+      link.click();
+    }
+  </script>
+</body>
+</html>
