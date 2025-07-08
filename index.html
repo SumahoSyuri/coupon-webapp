@@ -7,124 +7,69 @@
     body {
       font-family: sans-serif;
       text-align: center;
-      background-color: #f9f9f9;
-      padding: 20px;
+      padding: 50px;
+      background-color: #f0f8ff;
     }
-
-    canvas {
-      border: 1px solid #ccc;
-      max-width: 100%;
-      opacity: 0;
-      transition: opacity 1s ease-in-out;
-    }
-
-    canvas.show {
-      opacity: 1;
-    }
-
     button {
-      margin-top: 20px;
-      padding: 12px 24px;
-      font-size: 18px;
+      padding: 16px 32px;
+      font-size: 20px;
       border: none;
       border-radius: 8px;
-      background-color: #007bff;
+      background-color: #28a745;
       color: white;
       cursor: pointer;
-      transition: transform 0.2s ease;
-    }
-
-    button:hover {
-      transform: scale(1.05);
     }
   </style>
 </head>
 <body>
-  <h2>🎁 クーポン発行 🎁</h2>
-
-  <canvas id="couponCanvas" width="800" height="500"></canvas>
-  <br>
-  <button onclick="issueCoupon()">クーポンを発行する</button>
-  <br><br>
-  <button onclick="downloadCoupon()">画像を保存</button>
+  <h2>🎁 Webクーポンを発行する 🎁</h2>
+  <p>ボタンを押すとクーポンを発行します</p>
+  <button onclick="issueCoupon()">クーポン発行</button>
 
   <script>
-    const canvas = document.getElementById('couponCanvas');
-    const ctx = canvas.getContext('2d');
-
-    function generateSerialNumber() {
-      const now = new Date();
-      const yyyymmdd = now.toISOString().slice(0, 10).replace(/-/g, '');
-      const random = Math.random().toString(36).substring(2, 6).toUpperCase(); // 例: A3F9
-      return `C${yyyymmdd}-${random}`;
-    }
-
-    function drawCouponCanvas(serial, expireDate) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-
-      // 背景
-      ctx.fillStyle = "#ffffff";
-      ctx.fillRect(0, 0, canvas.width, canvas.height);
-
-      // 見出し
-      ctx.fillStyle = "#000000";
-      ctx.font = "bold 36px sans-serif";
-      ctx.fillText("🎁 500円割引クーポン 🎁", 200, 100);
-
-      // 管理番号（左上）
-      ctx.font = "20px sans-serif";
-      ctx.fillText(`管理番号 : ${serial}`, 20, 40);
-
-      // 有効期限（中央下）
-      const dateParts = expireDate.split("-");
-      const expiryText = `有効期限 : ${dateParts[0]}年 ${parseInt(dateParts[1])}月 ${parseInt(dateParts[2])}日`;
-      ctx.font = "24px sans-serif";
-      ctx.fillText(expiryText, 220, 400);
-    }
-
-    function issueCoupon() {
-      const serial = generateSerialNumber();
-
+    async function issueCoupon() {
       const today = new Date();
-      const issueDate = today.toISOString().split("T")[0];
+      const y = today.getFullYear();
+      const m = ("0" + (today.getMonth() + 1)).slice(-2);
+      const d = ("0" + today.getDate()).slice(-2);
+      const issueDate = `${y}-${m}-${d}`;
 
       const expiry = new Date(today);
-      expiry.setDate(today.getDate() + 90);
-      const expireDate = expiry.toISOString().split("T")[0];
+      expiry.setDate(expiry.getDate() + 90);
+      const ey = expiry.getFullYear();
+      const em = ("0" + (expiry.getMonth() + 1)).slice(-2);
+      const ed = ("0" + expiry.getDate()).slice(-2);
+      const expireDate = `${ey}-${em}-${ed}`;
 
-      fetch("https://script.google.com/macros/s/AKfycbxiUvN5MlY4vM9-leao0POEz1gFUauYPYMoiskg2Ep2ZIugGJ_m2tqox4Y4rsc0PeZi_w/exec", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          serial: serial,
-          discount: "500円割引",
-          issueDate: issueDate,
-          expireDate: expireDate
-        })
-      })
-      .then(res => res.json())
-      .then(data => {
-        if (data.result === "success") {
-          drawCouponCanvas(serial, expireDate);
-          canvas.classList.add("show");
-        } else {
-          alert("保存に失敗しました。");
-        }
-      })
-      .catch(err => {
-        console.error("通信エラー:", err);
-        alert("通信エラーが発生しました。");
-      });
-    }
+      const data = {
+        discount: "500円",
+        issueDate: issueDate,
+        expireDate: expireDate
+      };
 
-    function downloadCoupon() {
-      const image = canvas.toDataURL("image/png");
-      const link = document.createElement('a');
-      link.download = 'coupon.png';
-      link.href = image;
-      link.click();
+      try {
+        const res = await fetch("https://script.google.com/macros/s/AKfycbxiUvN5MlY4vM9-leao0POEz1gFUauYPYMoiskg2Ep2ZIugGJ_m2tqox4Y4rsc0PeZi_w/exec", {
+          method: "POST",
+          mode: "no-cors", // 成功ステータスが取れないが、送信はできる
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(data)
+        });
+
+        // リダイレクト（パラメータ付き）
+        const query = new URLSearchParams({
+          discount: data.discount,
+          issueDate: data.issueDate,
+          expireDate: data.expireDate,
+        });
+
+        // 管理番号はGAS側で決定 → coupon.htmlで再取得でもOK
+        window.location.href = `coupon.html?${query.toString()}`;
+      } catch (err) {
+        alert("クーポン発行に失敗しました。");
+        console.error(err);
+      }
     }
   </script>
 </body>
