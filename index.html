@@ -2,74 +2,89 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <title>Webクーポン発行機</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>クーポンカードゲーム</title>
   <style>
     body {
       font-family: sans-serif;
       text-align: center;
-      padding: 50px;
-      background-color: #f0f8ff;
+      background: #fefbd8;
+      margin: 0;
+      padding: 20px;
     }
-    button {
-      padding: 16px 32px;
-      font-size: 20px;
-      border: none;
-      border-radius: 8px;
-      background-color: #28a745;
+    h1 {
+      font-size: 2em;
+      color: #e74c3c;
+    }
+    .cards {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+      margin-top: 40px;
+    }
+    .card {
+      width: 100px;
+      height: 150px;
+      background-color: #ccc;
+      border-radius: 10px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.2em;
+      font-weight: bold;
+      transition: transform 0.3s;
+    }
+    .card:hover {
+      transform: scale(1.05);
+    }
+    #result {
+      margin-top: 40px;
+      font-size: 1.5em;
+      color: #2c3e50;
+    }
+    #showCouponBtn {
+      margin-top: 20px;
+      font-size: 1em;
+      padding: 10px 20px;
+      background-color: #f39c12;
       color: white;
+      border: none;
+      border-radius: 5px;
+      display: none;
       cursor: pointer;
     }
   </style>
 </head>
 <body>
-  <h2>🎁 Webクーポンを発行する 🎁</h2>
-  <p>ボタンを押すとクーポンを発行します</p>
-  <button onclick="issueCoupon()">クーポン発行</button>
+  <h1>🎴 クーポンカードを1枚選んでね！</h1>
+  <div class="cards">
+    <div class="card" onclick="pickCard()">？</div>
+    <div class="card" onclick="pickCard()">？</div>
+    <div class="card" onclick="pickCard()">？</div>
+    <div class="card" onclick="pickCard()">？</div>
+  </div>
+  <div id="result"></div>
+  <button id="showCouponBtn" onclick="goToCoupon()">クーポンを表示する</button>
 
   <script>
-    async function issueCoupon() {
-      const today = new Date();
-      const y = today.getFullYear();
-      const m = ("0" + (today.getMonth() + 1)).slice(-2);
-      const d = ("0" + today.getDate()).slice(-2);
-      const issueDate = `${y}-${m}-${d}`;
+    let picked = false;
+    let pickedAmount = 0;
 
-      const expiry = new Date(today);
-      expiry.setDate(expiry.getDate() + 90);
-      const ey = expiry.getFullYear();
-      const em = ("0" + (expiry.getMonth() + 1)).slice(-2);
-      const ed = ("0" + expiry.getDate()).slice(-2);
-      const expireDate = `${ey}-${em}-${ed}`;
+    function pickCard() {
+      if (picked) return;
+      picked = true;
 
-      const data = {
-        discount: "500円",
-        issueDate: issueDate,
-        expireDate: expireDate
-      };
+      const amounts = [100, 200, 300, 500];
+      pickedAmount = amounts[Math.floor(Math.random() * amounts.length)];
 
-      try {
-        const res = await fetch("https://script.google.com/macros/s/AKfycby9hDb_-R6TXajDYUNepdwqfiDIWdUXf5X787qSBm8ZYDxHdaB22Gx1tlMf7Bc17Ht49Q/exec", {
-          method: "POST",
-          mode: "no-cors", // 成功ステータスが取れないが、送信はできる
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify(data)
-        });
+      document.getElementById('result').innerHTML =
+        `🎯 おめでとう！<strong style="color:#e74c3c; font-size:1.6em;">${pickedAmount}円</strong>のクーポンが当たったよ！`;
+      document.getElementById('showCouponBtn').style.display = 'inline-block';
+    }
 
-        // リダイレクト（パラメータ付き）
-        const query = new URLSearchParams({
-          discount: data.discount,
-          issueDate: data.issueDate,
-          expireDate: data.expireDate,
-        });
-
-        // 管理番号はGAS側で決定 → coupon.htmlで再取得でもOK
-        window.location.href = `coupon.html?${query.toString()}`;
-      } catch (err) {
-        alert("クーポン発行に失敗しました。");
-        console.error(err);
-      }
+    function goToCoupon() {
+      window.location.href = `coupon.html?value=${pickedAmount}`;
     }
   </script>
 </body>
