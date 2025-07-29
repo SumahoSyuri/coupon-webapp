@@ -45,15 +45,15 @@
   <div class="note">
     この画面を店員さんに見せてください 😊
   </div>
-  <button id="useBtn" onclick="goToReview()">クーポンを利用する</button>
+  <button id="useBtn" onclick="goToThanks()">クーポンを利用する</button>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const value = params.get('value') || '???';
     document.getElementById('couponValue').innerHTML = `🎊 ${value}円OFFクーポン 🎊`;
 
-    function goToReview() {
-      window.location.href = 'https://g.page/r/CdR6B0kblKpvEAE/review';
+    function goToThanks() {
+      window.location.href = 'thanks.html';
     }
   </script>
 </body>
