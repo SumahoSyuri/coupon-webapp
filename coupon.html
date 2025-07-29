@@ -7,14 +7,23 @@
   <style>
     body {
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
-      text-align: center;
-      background: linear-gradient(to top, #fff5d7, #f7e1a1);
       margin: 0;
+      background: linear-gradient(to top, #fff5d7, #f7e1a1);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      text-align: center;
       padding: 20px;
+      box-sizing: border-box;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
     }
 
     .coupon {
-      margin: 60px auto 20px;
       font-size: 1.6em;
       color: #d35400;
       background: #fffbec;
@@ -22,22 +31,20 @@
       padding: 16px 12px;
       border-radius: 20px;
       display: inline-block;
-      max-width: 100%;
-      box-sizing: border-box;
       white-space: nowrap;
       overflow-x: auto;
+      margin: 0 auto 20px;
+      box-sizing: border-box;
     }
 
-
     .note {
-      margin-top: 20px;
       font-size: 1em;
       color: #333;
       padding: 0 10px;
+      margin-bottom: 30px;
     }
 
     #useBtn {
-      margin-top: 30px;
       font-size: 1em;
       padding: 12px 24px;
       background-color: #27ae60;
@@ -64,13 +71,15 @@
   </style>
 </head>
 <body>
-  <div class="coupon" id="couponValue">
-    🎊 ●●円OFFクーポン 🎊
+  <div class="container">
+    <div class="coupon" id="couponValue">
+      🎊 ●●円OFFクーポン 🎊
+    </div>
+    <div class="note">
+      この画面を店員に見せてください 😊
+    </div>
+    <button id="useBtn" onclick="goToThanks()">クーポンを利用する</button>
   </div>
-  <div class="note">
-    この画面を店員に見せてください 😊
-  </div>
-  <button id="useBtn" onclick="goToThanks()">クーポンを利用する</button>
 
   <script>
     const params = new URLSearchParams(window.location.search);
