@@ -15,16 +15,19 @@
 
     .coupon {
       margin: 60px auto 20px;
-      font-size: 1.8em;
+      font-size: 1.6em;
       color: #d35400;
       background: #fffbec;
       border: 4px dashed #f39c12;
-      padding: 24px 16px;
+      padding: 16px 12px;
       border-radius: 20px;
       display: inline-block;
-      max-width: 90%;
+      max-width: 100%;
       box-sizing: border-box;
+      white-space: nowrap;
+      overflow-x: auto;
     }
+
 
     .note {
       margin-top: 20px;
@@ -65,7 +68,7 @@
     🎊 ●●円OFFクーポン 🎊
   </div>
   <div class="note">
-    この画面を店員さんに見せてください 😊
+    この画面を店員に見せてください 😊
   </div>
   <button id="useBtn" onclick="goToThanks()">クーポンを利用する</button>
 
