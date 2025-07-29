@@ -19,9 +19,11 @@
     }
 
     h1 {
-      font-size: 1.8rem;
+      font-size: 1.6rem;
       color: #27ae60;
       margin-bottom: 1.5rem;
+      white-space: nowrap; /* ← 改行させない */
+      letter-spacing: -0.02em; /* ← ほんの少し詰める */
     }
 
     .message {
@@ -58,16 +60,15 @@
   <h1>ご利用ありがとうございました！</h1>
 
   <div class="message">
-    <p>😊 またお困りの際はお気軽にご相談ください。</p>
-    <p>✨ よろしければ、感想をGoogleクチコミで教えていただけると嬉しいです！</p>
+    <p>またお困りの際はお気軽にご相談ください。😊</p>
+    <p>よろしければ、感想をGoogleクチコミで教えていただけると嬉しいです！✨</p>
   </div>
 
   <button class="review-btn" onclick="goToReview()">クチコミを書く</button>
 
   <script>
     function goToReview() {
-      // 実際のクチコミURLに置き換えてください
-      window.location.href = "https://g.page/r/CdR6B0kblKpvEBM/review";
+      window.location.href = "https://g.page/r/CdR6B0kblKpvEAE/review";
     }
   </script>
 </body>
