@@ -6,64 +6,79 @@
   <title>クーポンカードゲーム</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
       text-align: center;
       background: #fefbd8;
       margin: 0;
       padding: 20px;
     }
+
     h1 {
-      font-size: 2em;
+      font-size: 1.6em;
       color: #e74c3c;
+      margin-bottom: 24px;
     }
+
     .cards {
-      display: flex;
-      justify-content: center;
-      gap: 20px;
-      margin-top: 40px;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* ← 常に2列固定 */
+      gap: 16px;
+      justify-items: center;
+      max-width: 300px;
+      margin: 0 auto;
     }
+
     .card {
       width: 100px;
-      height: 150px;
+      height: 140px;
       background-color: #ccc;
       border-radius: 10px;
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.2em;
+      font-size: 1.4em;
       font-weight: bold;
-      transition: transform 0.3s;
+      transition: transform 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
     }
+
     .card:hover {
       transform: scale(1.05);
     }
+
     #result {
-      margin-top: 40px;
-      font-size: 1.5em;
+      margin-top: 30px;
+      font-size: 1.2em;
       color: #2c3e50;
+      padding: 0 10px;
     }
+
     #showCouponBtn {
       margin-top: 20px;
       font-size: 1em;
-      padding: 10px 20px;
+      padding: 12px 24px;
       background-color: #f39c12;
       color: white;
       border: none;
-      border-radius: 5px;
+      border-radius: 8px;
       display: none;
       cursor: pointer;
+      max-width: 300px;
+      width: 100%;
     }
   </style>
 </head>
 <body>
   <h1>🎴 クーポンカードを1枚選んでね！</h1>
+
   <div class="cards">
     <div class="card" onclick="pickCard()">？</div>
     <div class="card" onclick="pickCard()">？</div>
     <div class="card" onclick="pickCard()">？</div>
     <div class="card" onclick="pickCard()">？</div>
   </div>
+
   <div id="result"></div>
   <button id="showCouponBtn" onclick="goToCoupon()">クーポンを表示する</button>
 
@@ -79,7 +94,8 @@
       pickedAmount = amounts[Math.floor(Math.random() * amounts.length)];
 
       document.getElementById('result').innerHTML =
-        `🎯 おめでとう！<strong style="color:#e74c3c; font-size:1.6em;">${pickedAmount}円</strong>のクーポンが当たったよ！`;
+        `🎯 おめでとう！<strong style="color:#e74c3c; font-size:1.5em;">${pickedAmount}円</strong>のクーポンが当たったよ！`;
+
       document.getElementById('showCouponBtn').style.display = 'inline-block';
     }
 

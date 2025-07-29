@@ -6,35 +6,57 @@
   <title>クーポン表示</title>
   <style>
     body {
-      font-family: sans-serif;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
       text-align: center;
       background: linear-gradient(to top, #fff5d7, #f7e1a1);
       margin: 0;
-      padding: 30px;
+      padding: 20px;
     }
+
     .coupon {
-      margin-top: 80px;
-      font-size: 2em;
+      margin: 60px auto 20px;
+      font-size: 1.8em;
       color: #d35400;
       background: #fffbec;
       border: 4px dashed #f39c12;
-      padding: 30px;
+      padding: 24px 16px;
       border-radius: 20px;
       display: inline-block;
+      max-width: 90%;
+      box-sizing: border-box;
     }
+
     .note {
       margin-top: 20px;
-      font-size: 1.1em;
+      font-size: 1em;
+      color: #333;
+      padding: 0 10px;
     }
+
     #useBtn {
-      margin-top: 40px;
-      font-size: 1.1em;
-      padding: 10px 25px;
+      margin-top: 30px;
+      font-size: 1em;
+      padding: 12px 24px;
       background-color: #27ae60;
       color: white;
       border: none;
-      border-radius: 6px;
+      border-radius: 8px;
       cursor: pointer;
+      width: 80%;
+      max-width: 300px;
+    }
+
+    @media (min-width: 768px) {
+      .coupon {
+        font-size: 2.4em;
+        padding: 30px 40px;
+      }
+      .note {
+        font-size: 1.2em;
+      }
+      #useBtn {
+        font-size: 1.1em;
+      }
     }
   </style>
 </head>
