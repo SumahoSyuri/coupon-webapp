@@ -13,7 +13,6 @@
       display: flex;
       justify-content: center;
       align-items: center;
-      text-align: center;
       padding: 20px;
       box-sizing: border-box;
     }
@@ -21,20 +20,21 @@
     .container {
       width: 100%;
       max-width: 480px;
+      text-align: center;
     }
 
     .coupon {
-      font-size: 1.6em;
+      font-size: 2.2em;
       color: #d35400;
       background: #fffbec;
       border: 4px dashed #f39c12;
-      padding: 16px 12px;
+      padding: 20px 30px;
       border-radius: 20px;
-      display: inline-block;
-      white-space: nowrap;
-      overflow-x: auto;
       margin: 0 auto 20px;
       box-sizing: border-box;
+      display: inline-block;
+      max-width: 100%;
+      word-break: break-word;
     }
 
     .note {
@@ -58,8 +58,8 @@
 
     @media (min-width: 768px) {
       .coupon {
-        font-size: 2.4em;
-        padding: 30px 40px;
+        font-size: 3em;
+        padding: 30px 50px;
       }
       .note {
         font-size: 1.2em;
@@ -73,7 +73,7 @@
 <body>
   <div class="container">
     <div class="coupon" id="couponValue">
-      🎊 ●●円OFFクーポン 🎊
+      🎊 ●●円OFF 🎊 クーポン
     </div>
     <div class="note">
       この画面を店員に見せてください 😊
@@ -84,7 +84,7 @@
   <script>
     const params = new URLSearchParams(window.location.search);
     const value = params.get('value') || '???';
-    document.getElementById('couponValue').innerHTML = `🎊 ${value}円OFFクーポン 🎊`;
+    document.getElementById('couponValue').innerHTML = `🎊 ${value}円OFF 🎊<br>クーポン`;
 
     function goToThanks() {
       window.location.href = 'thanks.html';
