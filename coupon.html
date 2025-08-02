@@ -24,67 +24,81 @@
     }
 
     .coupon {
-      font-size: 2.2em;
+      font-size: 1.2em;
       color: #d35400;
       background: #fffbec;
-      border: 4px dashed #f39c12;
-      padding: 20px 30px;
-      border-radius: 20px;
-      margin: 0 auto 20px;
+      border: 1.5px dashed #f39c12;
+      padding: 6px 12px;
+      border-radius: 10px;
+      margin: 0 auto 14px;
       box-sizing: border-box;
       display: inline-block;
-      max-width: 100%;
       word-break: break-word;
     }
 
+    .coupon-image {
+      max-width: 40%;
+      height: auto;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin: 0 auto 18px;
+      display: block;
+    }
+
     .note {
-      font-size: 1em;
+      font-size: 0.9em;
       color: #333;
       padding: 0 10px;
-      margin-bottom: 30px;
+      margin-bottom: 22px;
     }
 
     #useBtn {
-      font-size: 1em;
-      padding: 12px 24px;
+      font-size: 0.9em;
+      padding: 10px 20px;
       background-color: #27ae60;
       color: white;
       border: none;
       border-radius: 8px;
       cursor: pointer;
       width: 80%;
-      max-width: 300px;
+      max-width: 260px;
     }
 
     @media (min-width: 768px) {
       .coupon {
-        font-size: 3em;
-        padding: 30px 50px;
+        font-size: 1.5em;
+        padding: 12px 20px;
       }
       .note {
-        font-size: 1.2em;
+        font-size: 1em;
       }
       #useBtn {
-        font-size: 1.1em;
+        font-size: 0.95em;
       }
     }
   </style>
 </head>
 <body>
   <div class="container">
-    <div class="coupon" id="couponValue">
-      🎊 ●●円OFF 🎊 クーポン
-    </div>
-    <div class="note">
-      この画面を店員に見せてください 😊
-    </div>
+    <div class="coupon" id="couponValue">🎊 ●●円OFF クーポン 🎊</div>
+    <img id="couponImage" class="coupon-image" src="" alt="クーポン画像" style="display: none;" />
+    <div class="note">この画面を店員に見せてください 😊</div>
     <button id="useBtn" onclick="goToThanks()">クーポンを利用する</button>
   </div>
 
   <script>
     const params = new URLSearchParams(window.location.search);
     const value = params.get('value') || '???';
-    document.getElementById('couponValue').innerHTML = `🎊 ${value}円OFF 🎊<br>クーポン`;
+
+    // 金額表示を更新
+    const couponEl = document.getElementById('couponValue');
+    couponEl.innerHTML = `🎊 ${value}円OFF クーポン 🎊`;
+
+    // 金額に対応する画像を設定（例：img-100.png）
+    const imgPath = `img-${value}.png`;
+    const imgEl = document.getElementById('couponImage');
+    imgEl.src = imgPath;
+    imgEl.style.display = 'block';
 
     function goToThanks() {
       window.location.href = 'thanks.html';
