@@ -9,13 +9,14 @@
       font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
       margin: 0;
       background: linear-gradient(to top, #fff5d7, #f7e1a1);
-      min-height: 100vh;
+      height: 100dvh;           /* ← ここを変更 */
       display: flex;
       justify-content: center;
       align-items: center;
-      padding: 20px;
       box-sizing: border-box;
+      padding: 0;               /* ← 必要なら余白削除 */
     }
+
 
     .container {
       width: 100%;
@@ -37,7 +38,7 @@
     }
 
     .coupon-image {
-      max-width: 40%;
+      max-width: 50%;
       height: auto;
       border-radius: 8px;
       box-shadow: 0 2px 5px rgba(0,0,0,0.1);
