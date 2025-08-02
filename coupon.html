@@ -23,7 +23,7 @@
     }
 
     .coupon {
-      font-size: 1.6em;
+      font-size: 1.8em;
       color: #d35400;
       background: #fffbec;
       border: 2px dashed #f39c12;
@@ -43,13 +43,13 @@
     }
 
     .note {
-      font-size: 1em;
+      font-size: 1.2em;
       color: #333;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
     }
 
     #useBtn {
-      font-size: 1em;
+      font-size: 1.2em;
       padding: 12px 24px;
       background-color: #f39c12;
       color: white;
@@ -63,7 +63,7 @@
 </head>
 <body>
   <div class="container">
-    <div class="coupon" id="couponValue">🎊 ●●円OFF クーポン 🎊</div>
+    <div class="coupon" id="couponValue">🎊 ●●円OFF 🎊<br>クーポン </div>
     <img id="couponImage" class="coupon-image" src="" alt="クーポン画像" style="display: none;" />
     <div class="note">この画面を店員に見せてください 😊</div>
     <button id="useBtn" onclick="goToThanks()">クーポンを利用する</button>
@@ -74,7 +74,7 @@
     const value = params.get('value') || '???';
 
     const couponEl = document.getElementById('couponValue');
-    couponEl.innerHTML = `🎊 ${value}円OFF クーポン 🎊`;
+    couponEl.innerHTML = `🎊 ${value}円OFF 🎊<br>クーポン`;
 
     const imgPath = `img-${value}.png`;
     const imgEl = document.getElementById('couponImage');
