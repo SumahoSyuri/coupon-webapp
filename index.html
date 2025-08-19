@@ -86,7 +86,7 @@
 
   <div class="cards" id="cardContainer"></div>
 
-  <button id="showCouponBtn" onclick="goToCoupon()">クーポンを表示する</button>
+  <button id="showCouponBtn" onclick="goToThanks()">クーポンを利用する</button>
 
   <script>
     const prizes = [300, 400, 500, 800];
@@ -135,10 +135,10 @@
       document.getElementById('showCouponBtn').style.display = 'inline-block';
     }
 
-    function goToCoupon() {
-      window.location.href = `coupon.html?value=${pickedAmount}`;
+    function goToThanks() {
+      window.location.href = `thanks.html?value=${pickedAmount}`;
     }
-
+    
     renderCards();
   </script>
 </body>

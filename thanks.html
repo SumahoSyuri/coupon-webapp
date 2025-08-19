@@ -26,6 +26,18 @@
       letter-spacing: -0.02em; /* ← ほんの少し詰める */
     }
 
+    .coupon {
+      font-size: 2em;
+      color: #d35400;
+      background: #fffbec;
+      border: 2px dashed #f39c12;
+      padding: 8px 16px;
+      border-radius: 10px;
+      margin: 0 auto 16px;
+      display: inline-block;
+      word-break: break-word;
+    }
+
     .message {
       font-size: 1.1rem;
       line-height: 1.6;
@@ -57,6 +69,10 @@
   </style>
 </head>
 <body>
+  <div class="container">
+    <div class="coupon" id="couponValue">🎊 ●●円OFF 🎊<br>クーポン </div>
+  </div>
+
   <h1>ご利用ありがとうございました！</h1>
 
   <div class="message">
@@ -67,6 +83,12 @@
   <button class="review-btn" onclick="goToReview()">クチコミを書く</button>
 
   <script>
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get('value') || '???';
+
+    const couponEl = document.getElementById('couponValue');
+    couponEl.innerHTML = `🎊 ${value}円OFF 🎊<br>クーポン`;
+
     function goToReview() {
       window.location.href = "https://g.page/r/CdR6B0kblKpvEAE/review";
     }
