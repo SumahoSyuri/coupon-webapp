@@ -180,12 +180,6 @@
       window.location.href = `thanks.html?value=${pickedAmount}`;
     }
 
-    // ポップアップ背景クリックでも閉じる
-    const popup = document.getElementById('popup');
-    popup.addEventListener('click', (e) => {
-      if (e.target === popup) popup.style.display = 'none';
-    });
-
     renderCards();
   </script>
 </body>
