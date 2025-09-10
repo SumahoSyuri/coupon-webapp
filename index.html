@@ -66,18 +66,44 @@
       border-radius: 12px;
     }
 
-    #showCouponBtn {
-      margin-top: 20px;
-      font-size: 1.2em;
-      padding: 12px 24px;
-      background-color: #f39c12;
-      color: white;
+    /* ポップアップ */
+    .popup {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+      z-index: 1000;
+      padding: 10px;
+      box-sizing: border-box;
+    }
+
+    .popup img {
+      width: 100%;
+      max-width: 300px;
+      max-height: 70vh;
+      object-fit: contain;
+    }
+
+    .close-btn {
+      display: block;
+      margin: 20px auto 0; /* 中央配置 */
+      padding: 15px 40px;  /* 幅広め */
+      background: white;
       border: none;
       border-radius: 8px;
-      display: none;
+      font-size: 18px;
+      font-weight: bold;
       cursor: pointer;
-      max-width: 300px;
-      width: 100%;
+      text-align: center;
+    }
+
+    #showCouponBtn {
+      display: none; /* 使わないけど念のため非表示 */
     }
   </style>
 </head>
@@ -86,14 +112,21 @@
 
   <div class="cards" id="cardContainer"></div>
 
-  <button id="showCouponBtn" onclick="goToThanks()">クーポンを利用する</button>
+  <button id="showCouponBtn">クーポンを利用する</button>
+
+  <!-- ポップアップ -->
+  <div class="popup" id="popup">
+    <div>
+      <img src="" alt="拡大クーポン" id="popupImage">
+      <button class="close-btn" id="closeBtn" onclick="goToThanks()">クーポンを利用する</button>
+    </div>
+  </div>
 
   <script>
     const prizes = [300, 400, 500, 800];
     let pickedAmount = null;
     let picked = false;
 
-    // シャッフル関数
     function shuffle(array) {
       for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
@@ -106,7 +139,7 @@
       const container = document.getElementById('cardContainer');
       const shuffled = shuffle([...prizes]);
 
-      shuffled.forEach((amount, index) => {
+      shuffled.forEach((amount) => {
         const card = document.createElement('div');
         card.className = 'card';
         card.onclick = () => flipCard(card, amount);
@@ -131,14 +164,28 @@
       picked = true;
       pickedAmount = amount;
 
-      card.querySelector('.inner').classList.add('flipped');
-      document.getElementById('showCouponBtn').style.display = 'inline-block';
+      const inner = card.querySelector('.inner');
+      inner.classList.add('flipped');
+
+      // 1秒後にポップアップ表示
+      setTimeout(() => {
+        const popup = document.getElementById('popup');
+        const popupImage = document.getElementById('popupImage');
+        popupImage.src = `img-${amount}.png`;
+        popup.style.display = 'flex';
+      }, 1000);
     }
 
     function goToThanks() {
       window.location.href = `thanks.html?value=${pickedAmount}`;
     }
-    
+
+    // ポップアップ背景クリックでも閉じる
+    const popup = document.getElementById('popup');
+    popup.addEventListener('click', (e) => {
+      if (e.target === popup) popup.style.display = 'none';
+    });
+
     renderCards();
   </script>
 </body>
