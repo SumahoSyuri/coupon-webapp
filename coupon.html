@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>クーポン表示</title>
+  <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 20px 20px 40px;
+      font-family: -apple-system, BlinkMacSystemFont, "Noto Sans JP", sans-serif;
+      background-color: #cce7e2;
+      text-align: center;
+      box-sizing: border-box;
+      overflow-x: hidden;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    .coupon {
+      font-size: 2em;
+      color: #d35400;
+      background: #fffbec;
+      border: 2px dashed #f39c12;
+      padding: 8px 16px;
+      border-radius: 10px;
+      margin: 0 auto 16px;
+      display: inline-block;
+      word-break: break-word;
+    }
+
+    .coupon-image {
+      max-width: 60%;
+      height: auto;
+      border-radius: 10px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      margin: 0 auto 18px; /* ← 中央寄せ + 下の余白 */
+    }
+
+    .note {
+      font-size: 1.2em;
+      color: #333;
+      margin-bottom: 30px;
+    }
+
+    #useBtn {
+      font-size: 1.2em;
+      padding: 12px 24px;
+      background-color: #f39c12;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      width: 80%;
+      max-width: 280px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="coupon" id="couponValue">🎊 ●●円OFF 🎊<br>クーポン </div>
+    <img id="couponImage" class="coupon-image" src="" alt="クーポン画像" style="display: none;" />
+    <div class="note">この画面を店員に見せてください 😊</div>
+    <button id="useBtn" onclick="goToThanks()">クーポンを利用する</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const value = params.get('value') || '???';
+
+    const couponEl = document.getElementById('couponValue');
+    couponEl.innerHTML = `🎊 ${value}円OFF 🎊<br>クーポン`;
+
+    const imgPath = `img-${value}.png`;
+    const imgEl = document.getElementById('couponImage');
+    imgEl.src = imgPath;
+    imgEl.style.display = 'block';
+
+    function goToThanks() {
+      window.location.href = 'thanks.html';
+    }
+  </script>
+</body>
+</html>
