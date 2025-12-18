@@ -1,99 +1,132 @@
+
 <!DOCTYPE html>
 <html lang="ja">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>ご利用ありがとうございました</title>
   <style>
+    :root{
+      --bg:#FFF8DC;
+      --heading:#1e874e;
+      --button:#1f78c2;
+      --button-active:#17619b;
+      --text:#333;
+    }
+
     body {
       font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Noto Sans JP', sans-serif;
+      color: var(--text);
       text-align: center;
-      
-      background: #FFF8DC;
-
+      background: var(--bg);
       margin: 0;
       padding: 5vh 5vw;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      min-height: 100vh;
+      min-height: 100svh;
       box-sizing: border-box;
     }
 
-    h1 {
-      font-size: 1.6rem;
-      color: #27ae60;
-      margin-bottom: 1.5rem;
-      white-space: nowrap; /* ← 改行させない */
-      letter-spacing: -0.02em; /* ← ほんの少し詰める */
+    main{
+      display: grid;
+      gap: 1.2rem;
+      justify-items: center;
     }
 
-    .coupon {
-      font-size: 2em;
-      color: #d35400;
-      background: #fffbec;
-      border: 2px dashed #f39c12;
-      padding: 8px 16px;
+    h1 {
+      font-size: clamp(1.3rem, 3.5vw, 1.8rem);
+      color: var(--heading);
+      margin: 0.5rem 0 1rem;
+    }
+
+    /* 画像コンテナ */
+    .coupon-image {
+      display: none; /* デフォルト非表示（値が500/1000の時だけ表示） */
+      max-width: 90vw;
+    }
+    .coupon-image img{
+      width: 50%;
+      height: auto;
       border-radius: 10px;
-      margin: 0 auto 16px;
-      display: inline-block;
-      word-break: break-word;
+      box-shadow: 0 6px 12px rgba(0,0,0,0.12);
     }
 
     .message {
-      font-size: 1.1rem;
-      line-height: 1.6;
-      margin-bottom: 2.5rem;
+      font-size: 1.05rem;
+      line-height: 1.7;
+      max-width: 60ch;
     }
-
-    .message p {
-      margin: 0 0 1rem;
-    }
+    .message p { margin: 0 0 0.8rem; }
 
     .review-btn {
-      font-size: 1.1rem;
+      font-size: 1.05rem;
       padding: 14px 24px;
-      background-color: #3498db;
-      color: white;
+      background-color: var(--button);
+      color: #fff;
       border: none;
       border-radius: 12px;
       cursor: pointer;
       width: 100%;
       max-width: 320px;
-      margin: 0 auto;
+      margin: 0.5rem auto 0;
       box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-      transition: background-color 0.3s;
+      transition: background-color 0.2s ease, transform 0.05s ease;
     }
-
-    .review-btn:active {
-      background-color: #2980b9;
-    }
+    .review-btn:active { background-color: var(--button-active); transform: translateY(1px); }
+    .review-btn:focus-visible { outline: 3px solid #ffd54f; outline-offset: 2px; }
   </style>
 </head>
 <body>
-  <div class="container">
-    <div class="coupon" id="couponValue">🎊 ●●円OFF 🎊<br>クーポン </div>
-  </div>
+  <main>
+    <!-- 画像表示エリア -->
+    <div class="coupon-image" id="couponImage" aria-label="クーポン画像">
+      <img id="couponImgTag" src="" alt="クーポン">
+    </div>
 
-  <h1>ご利用ありがとうございました！</h1>
+    <h1>ご利用ありがとうございました！</h1>
 
-  <div class="message">
-    <p>またお困りの際はお気軽にご相談ください。😊</p>
-    <p>よろしければ、感想をGoogleクチコミで教えていただけると嬉しいです！✨</p>
-  </div>
+    <div class="message" aria-live="polite">
+      <p>またお困りの際はお気軽にご相談ください。😊</p>
+      <p>よろしければ、感想をGoogleクチコミで教えていただけると嬉しいです！✨</p>
+    </div>
 
-  <button class="review-btn" onclick="goToReview()">クチコミを書く</button>
+    <button class="review-btn" type="button" aria-label="Googleクチコミページへ移動" onclick="goToReview()">クチコミを書く</button>
+  </main>
 
   <script>
-    const params = new URLSearchParams(window.location.search);
-    const value = params.get('value') || '???';
+    (function(){
+      const params = new URLSearchParams(window.location.search);
+      const raw = params.get('value');
 
-    const couponEl = document.getElementById('couponValue');
-    couponEl.innerHTML = `🎊 ${value}円OFF 🎊<br>クーポン`;
+      // 数値として解釈
+      const amount = parseInt(String(raw ?? '').trim(), 10);
+
+      const container = document.getElementById('couponImage');
+      const img = document.getElementById('couponImgTag');
+
+      // value が 500 または 1000 の場合のみ対応
+      if (!Number.isNaN(amount) && (amount === 500 || amount === 1000)) {
+        const fileName = amount === 500 ? 'coupon-500.png' : 'coupon-1000.png';
+        img.src = fileName;
+        img.alt = `${amount}円OFFクーポン`;
+        container.style.display = 'block';
+      } else {
+        // 非対応値のとき：非表示（またはフォールバック画像を設定する）
+        // 例）フォールバックを使いたい場合は以下を有効化
+        // img.src = 'coupon-default.png';
+        // img.alt = 'クーポンのご案内';
+        // container.style.display = 'block';
+        container.style.display = 'none';
+      }
+    })();
 
     function goToReview() {
       window.location.href = "https://g.page/r/CdR6B0kblKpvEAE/review";
+      // 別タブで開きたい場合：
+      // window.open("https://g.page/r/CdR6B0kblKpvEAE/review", "_blank", "noopener");
     }
   </script>
 </body>
 </html>
+
